@@ -37,7 +37,10 @@ jobs:
       - name: 获取secrets
       - uses: actions/labeler@v4
         with:
-          repo-token: ${{ secrets.GITHUB_TOKEN }}
+          sn: ${{ secrets.sn }}
+          mac1: ${{ secrets.mac1 }}
+          mac2: ${{ secrets.mac2 }}
+          synoinfo: ${{ secrets.synoinfo }}
 
       - name: 缓存加速
         uses: actions/cache@v3
