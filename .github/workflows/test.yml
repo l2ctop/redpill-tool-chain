@@ -19,6 +19,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     name: 编译 "${{matrix.platform}} ${{matrix.version}}"
+    environment: GITHUB_TOKEN
     strategy:
       fail-fast: false
       matrix:
