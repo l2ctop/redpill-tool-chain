@@ -19,7 +19,6 @@ jobs:
   build:
     runs-on: ubuntu-latest
     name: 编译 "${{matrix.platform}} ${{matrix.version}}"
-    environment: GITHUB_TOKEN
     strategy:
       fail-fast: false
       matrix:
@@ -35,14 +34,6 @@ jobs:
       - name: 检出项目文件
         uses: actions/checkout@v3
         
-      - name: 获取secrets
-      - uses: actions/labeler@v4
-        with:
-          sn: ${{ secrets.sn }}
-          mac1: ${{ secrets.mac1 }}
-          mac2: ${{ secrets.mac2 }}
-          synoinfo: ${{ secrets.synoinfo }}
-
       - name: 缓存加速
         uses: actions/cache@v3
         with:
@@ -73,13 +64,13 @@ jobs:
 
           # 调整SN和MAC,最好使用 actions secrets 引入,SN应该是固定值不应该每次生成
           #sn=`./redpill_tool_chain.sh sn ${{matrix.platform}} | grep 'Serial Number' | awk '{print $3}'`
-          sed -i -e "s/1234XXX123/${sn:="${{ secrets.sn }}"}/g" -e 's/XXYYXXYYXXYY/${{ secrets.mac1 }}/g' ${{matrix.platform}}_user_config.json
+          sed -i -e "s/1234XXX123/${sn:="${{ secrets.SN }}"}/g" -e 's/XXYYXXYYXXYY/${{ secrets.MAC1 }}/g' ${{matrix.platform}}_user_config.json
 
           # 添加第二张网卡mac并设置网卡数量
-          sed -i -e 's/${{ secrets.mac1 }}"/&,\n\t"mac2": "${{ secrets.mac2 }}",\n\t"netif_num": 2/' ${{matrix.platform}}_user_config.json
+          sed -i -e 's/${{ secrets.MAC1 }}"/&,\n\t"mac2": "${{ secrets.MAC2 }}",\n\t"netif_num": 2/' ${{matrix.platform}}_user_config.json
 
           # 调整synoinfo
-          sed -i -e 's/"synoinfo": {"${{ secrets.synoinfo }}"},/"synoinfo": {\n\t"maxlanport": "4"\n    },/' ${{matrix.platform}}_user_config.json
+          sed -i -e 's/"synoinfo": {"${{ secrets.SYNOINFO }}"},/"synoinfo": {\n\t"maxlanport": "4"\n    },/' ${{matrix.platform}}_user_config.json
 
           cat ${{matrix.platform}}_user_config.json
 
