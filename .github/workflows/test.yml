@@ -33,6 +33,11 @@ jobs:
     steps:
       - name: 检出项目文件
         uses: actions/checkout@v3
+        
+      - name: 获取secrets
+      - uses: actions/labeler@v4
+        with:
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: 缓存加速
         uses: actions/cache@v3
